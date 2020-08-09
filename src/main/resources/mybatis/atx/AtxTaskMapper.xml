@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.atx.mapper.AtxTaskMapper">
+
+    <resultMap type="AtxTask" id="AtxTaskResult">
+        <result property="id"    column="id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="policyId"    column="policy_id"    />
+        <result property="taskStarttime"    column="task_starttime"    />
+        <result property="taskEndtime"    column="task_endtime"    />
+        <result property="progress"    column="progress"    />
+        <result property="nodeId"    column="node_id"    />
+        <result property="devices"    column="devices"    />
+        <result property="status"    column="status"    />
+        <result property="autoFlg"    column="auto_flg"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="currentCaseNum"    column="current_case_num"    />
+        <result property="totalCaseNum"    column="total_case_num"    />
+        <result property="testResult"    column="test_result"    />
+    </resultMap>
+
+    <resultMap type="AtxMainTask" id="AtxMainTaskResult">
+        <result property="taskName"    column="task_name"    />
+        <result property="policyId"    column="policy_id"    />
+        <result property="policyName"    column="policy_name"    />
+        <result property="computerName"    column="computer_name"    />
+        <result property="taskStarttime"    column="task_starttime"    />
+        <result property="taskEndtime"    column="task_endtime"    />
+        <result property="nodeId"    column="node_id"    />
+        <result property="currentCaseNum"    column="current_case_num"    />
+        <result property="totalCaseNum"    column="total_case_num"    />
+        <result property="testResult"    column="test_result"    />
+    </resultMap>
+
+    <sql id="selectAtxTaskVo">
+        select id, task_name, policy_id, task_starttime, task_endtime, progress, node_id, devices, status, auto_flg, create_time, current_case_num, total_case_num, test_result from atx_task
+    </sql>
+
+    <select id="selectAtxTaskListByInfo" parameterType="AtxTask" resultMap="AtxTaskResult">
+        <include refid="selectAtxTaskVo"/>
+        <where>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="policyId != null "> and policy_id = #{policyId}</if>
+            <if test="taskStarttime != null "> and task_starttime = #{taskStarttime}</if>
+            <if test="taskEndtime != null "> and task_endtime = #{taskEndtime}</if>
+            <if test="progress != null "> and progress = #{progress}</if>
+            <if test="nodeId != null "> and node_id = #{nodeId}</if>
+            <if test="devices != null  and devices != ''"> and devices = #{devices}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="autoFlg != null "> and auto_flg = #{autoFlg}</if>
+            <if test="currentCaseNum != null "> and current_case_num = #{currentCaseNum}</if>
+            <if test="totalCaseNum != null "> and total_case_num = #{totalCaseNum}</if>
+            <if test="testResult != null "> and test_result = #{testResult}</if>
+        </where>
+    </select>
+
+    <select id="selectMainTaskList" resultMap="AtxMainTaskResult">
+        SELECT node_id, task_name,policy_name,computer_name,task_starttime,task_endtime,current_case_num,total_case_num,test_result from  atx_task as a left JOIN atx_policy as b ON a.policy_id = b.id  left JOIN atx_node as c ON a.node_id = c.id
+    </select>
+
+    <select id="selectAtxTaskList" resultMap="AtxTaskResult">
+        select id, task_name, policy_id, task_starttime, task_endtime, progress, node_id, devices, status, auto_flg, create_time, current_case_num, total_case_num, test_result from atx_task
+    </select>
+
+    <select id="selectAtxTaskById" parameterType="Long" resultMap="AtxTaskResult">
+        <include refid="selectAtxTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAtxTask" parameterType="AtxTask" useGeneratedKeys="true" keyProperty="id">
+        insert into atx_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">task_name,</if>
+            <if test="policyId != null">policy_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="progress != null">progress,</if>
+            <if test="nodeId != null">node_id,</if>
+            <if test="devices != null and devices != ''">devices,</if>
+            <if test="status != null">status,</if>
+            <if test="autoFlg != null">auto_flg,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="currentCaseNum != null">current_case_num,</if>
+            <if test="totalCaseNum != null">total_case_num,</if>
+            <if test="testResult != null">test_result,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">#{taskName},</if>
+            <if test="policyId != null">#{policyId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="progress != null">#{progress},</if>
+            <if test="nodeId != null">#{nodeId},</if>
+            <if test="devices != null and devices != ''">#{devices},</if>
+            <if test="status != null">#{status},</if>
+            <if test="autoFlg != null">#{autoFlg},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="currentCaseNum != null">#{currentCaseNum},</if>
+            <if test="totalCaseNum != null">#{totalCaseNum},</if>
+            <if test="testResult != null">#{testResult},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAtxTask" parameterType="AtxTask">
+        update atx_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="policyId != null">policy_id = #{policyId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="progress != null">progress = #{progress},</if>
+            <if test="nodeId != null">node_id = #{nodeId},</if>
+            <if test="devices != null and devices != ''">devices = #{devices},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="autoFlg != null">auto_flg = #{autoFlg},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="currentCaseNum != null">current_case_num = #{currentCaseNum},</if>
+            <if test="totalCaseNum != null">total_case_num = #{totalCaseNum},</if>
+            <if test="testResult != null">test_result = #{testResult},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAtxTaskById" parameterType="Long">
+        delete from atx_task where id = #{id}
+    </delete>
+
+    <delete id="deleteAtxTaskByIds" parameterType="String">
+        delete from atx_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper> 

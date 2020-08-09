@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.atx.mapper.AtxNodeMapper">
+	<resultMap type="AtxNode" id="AtxNodeResult">
+		<result property="id"    column="id"    />
+		<result property="ip"    column="ip"    />
+		<result property="mac"    column="mac"    />
+		<result property="computerName"    column="computer_name"    />
+		<result property="policyId"    column="policy_id"    />
+		<result property="status"    column="status"    />
+		<result property="createTime"    column="create_time"    />
+		<result property="updateTime"    column="update_time"    />
+	</resultMap>
+
+	<resultMap type="AtxDevice" id="AtxDeviceResult">
+		<result property="id"    column="id"    />
+		<result property="nodeId"    column="node_id"    />
+		<result property="status"    column="status"    />
+		<result property="name"    column="name"    />
+		<result property="vsgCom"    column="vsg_com"    />
+		<result property="comment"    column="comment"    />
+		<result property="createTime"    column="create_time"    />
+		<result property="updateTime"    column="update_time"    />
+	</resultMap>
+
+
+	<sql id="selectAtxNodeVo">
+		select id, ip, mac, computer_name, policy_id, status, create_time, update_time from atx_node
+	</sql>
+
+	<select id="selectNodeList" resultMap="AtxNodeResult">
+		select id, ip, mac, computer_name, policy_id, status, create_time, update_time from atx_node
+		where  status = 0
+	</select>
+
+	<select id="selectDeviceList" parameterType="Integer" resultMap="AtxDeviceResult">
+		select id, node_id,status,name,vsg_com,comment,create_time,update_time from atx_device
+		where
+		node_id = #{nodeId}
+	</select>
+
+
+
+	<select id="insert" parameterType="AtxNode" >
+		insert into atx_node (ip, mac, computer_name)
+		values
+        (#{ip}, #{mac}, #{computerName})
+	</select>
+
+
+</mapper>
