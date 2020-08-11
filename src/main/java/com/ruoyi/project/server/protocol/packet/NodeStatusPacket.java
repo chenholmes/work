@@ -1,4 +1,4 @@
-package com.ruoyi.project.server.protocol.request;
+package com.ruoyi.project.server.protocol.packet;
 
 import com.ruoyi.project.server.protocol.Packet;
 import com.ruoyi.project.server.protocol.command.Command;
@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020/8/7 15:23
  */
 @Data
-public class NodeStatusRequestPacket extends Packet {
+public class NodeStatusPacket extends Packet {
 
     private int status;
     private int progress;

@@ -1,4 +1,4 @@
-package com.ruoyi.project.server.protocol.request;
+package com.ruoyi.project.server.protocol.packet;
 
 import com.ruoyi.project.server.protocol.Packet;
 import com.ruoyi.project.server.protocol.command.Command;
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class ConnectRequestPacket extends Packet {
+public class ConnectPacket extends Packet {
 
     private String ip;
     private String mac;

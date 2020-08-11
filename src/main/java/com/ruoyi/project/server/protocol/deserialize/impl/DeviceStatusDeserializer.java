@@ -2,8 +2,8 @@ package com.ruoyi.project.server.protocol.deserialize.impl;
 
 import com.ruoyi.project.server.protocol.Packet;
 import com.ruoyi.project.server.protocol.deserialize.Deserializer;
-import com.ruoyi.project.server.protocol.request.Device;
-import com.ruoyi.project.server.protocol.request.DeviceStatusRequestPacket;
+import com.ruoyi.project.server.protocol.packet.Device;
+import com.ruoyi.project.server.protocol.packet.DeviceStatusPacket;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -11,9 +11,11 @@ import java.util.List;
 
 public class DeviceStatusDeserializer implements Deserializer {
 
+    public static final DeviceStatusDeserializer INSTANCE = new DeviceStatusDeserializer();
+
     @Override
-    public Packet deserialize(byte[] data) {
-        DeviceStatusRequestPacket packet = new DeviceStatusRequestPacket();
+    public Packet deserialize(byte command, byte[] data) {
+        DeviceStatusPacket packet = new DeviceStatusPacket();
         packet.setNum(data[0]);
         packet.setDeviceList(parse(data));
         return packet;
@@ -24,7 +26,6 @@ public class DeviceStatusDeserializer implements Deserializer {
         List<Device> deviceList = new ArrayList<>();
         int n = 0;
         int start = 1;
-        byte len = data[0];
         for(int i = 1; i < data.length; i++) {
             if(n == 0) i++;
             if(data[i] == 0) n++;

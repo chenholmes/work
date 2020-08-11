@@ -1,7 +1,7 @@
 package com.ruoyi.project.server.protocol.deserialize.impl;
 
 import com.ruoyi.project.server.protocol.Packet;
-import com.ruoyi.project.server.protocol.request.ConnectRequestPacket;
+import com.ruoyi.project.server.protocol.packet.ConnectPacket;
 import com.ruoyi.project.server.protocol.deserialize.Deserializer;
 
 /**
@@ -14,10 +14,10 @@ public class ConnnectDeserializer implements Deserializer {
 
 
     @Override
-    public Packet deserialize(byte[] data) {
+    public Packet deserialize(byte command, byte[] data) {
         String str = new String(data, 0, data.length);
         String[] strArray = str.split("\0");
-        ConnectRequestPacket packet = new ConnectRequestPacket(strArray[0],strArray[1],strArray[2]);
+        ConnectPacket packet = new ConnectPacket(strArray[0],strArray[1],strArray[2]);
 
         return packet;
     }

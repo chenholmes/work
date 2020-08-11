@@ -1,9 +1,7 @@
 package com.ruoyi.project.server.protocol;
 
-import com.ruoyi.project.server.protocol.deserialize.impl.NodeStatusDeserializer;
-import com.ruoyi.project.server.protocol.request.ConnectRequestPacket;
+import com.ruoyi.project.server.protocol.deserialize.impl.*;
 import com.ruoyi.project.server.protocol.deserialize.Deserializer;
-import com.ruoyi.project.server.protocol.deserialize.impl.ConnnectDeserializer;
 import com.ruoyi.project.server.protocol.serialize.Serializer;
 import com.ruoyi.project.server.protocol.serialize.impl.ReturnDataSerializer;
 import io.netty.buffer.ByteBuf;
@@ -16,8 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.ruoyi.project.server.protocol.command.Command.CONNECT_COMMAND;
-import static com.ruoyi.project.server.protocol.command.Command.NODE_STATUS_COMMAND;
+import static com.ruoyi.project.server.protocol.command.Command.*;
 
 /**
  * @author chenli.fnst
@@ -47,9 +44,17 @@ public class PacketCodeC {
         deserializerMap = new HashMap<>();
         deserializerMap.put(CONNECT_COMMAND, ConnnectDeserializer.INSTANCE);
         deserializerMap.put(NODE_STATUS_COMMAND, NodeStatusDeserializer.INSTANCE);
+        deserializerMap.put(DEVICE_STATUS_COMMAND, DeviceStatusDeserializer.INSTANCE);
+        deserializerMap.put(VSG_STATUS_COMMAND, VsgStatusDeserializer.INSTANCE);
+        deserializerMap.put(DEVICE_STATUS_CHANGE_COMMAND, ReturnDataDeserializer.INSTANCE);
+        deserializerMap.put(CASE_SEND_COMMAND,ReturnDataDeserializer.INSTANCE);
+        deserializerMap.put(CASE_CLEAR_COMMAND,ReturnDataDeserializer.INSTANCE);
+        deserializerMap.put(EXECUTE_COMMAND,ReturnDataDeserializer.INSTANCE);
         serializerMap = new HashMap<>();
         serializerMap.put(CONNECT_COMMAND, ReturnDataSerializer.INSTANCE);
         serializerMap.put(NODE_STATUS_COMMAND, ReturnDataSerializer.INSTANCE);
+        serializerMap.put(DEVICE_STATUS_COMMAND,ReturnDataSerializer.INSTANCE);
+        serializerMap.put(VSG_STATUS_COMMAND,ReturnDataSerializer.INSTANCE);
     }
 
     public ByteBuf encode(ByteBuf byteBuf,Packet packet) {
@@ -123,7 +128,7 @@ public class PacketCodeC {
         //解析数据部
         Deserializer deserializer = getDeserializer(command);
         if(deserializer != null) {
-            return deserializer.deserialize(content);
+            return deserializer.deserialize(command,content);
         }
         return null;
     }

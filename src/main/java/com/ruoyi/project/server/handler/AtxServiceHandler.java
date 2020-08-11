@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 通信命令业务处理
  * @author chenli.fnst
  * @date 2020/8/7 16:13
  */
@@ -23,6 +24,12 @@ public class AtxServiceHandler extends SimpleChannelInboundHandler<Packet> {
     private AtxServiceHandler() {
         handlerMap = new HashMap<>();
         handlerMap.put(Command.NODE_STATUS_COMMAND,NodeStatusHandler.INSTANCE);
+        handlerMap.put(Command.DEVICE_STATUS_COMMAND,DeviceStatusHandler.INSTANCE);
+        handlerMap.put(Command.VSG_STATUS_COMMAND,VsgStatusHandler.INSTANCE);
+        handlerMap.put(Command.DEVICE_STATUS_CHANGE_COMMAND,ReturnDataHandler.INSTANCE);
+        handlerMap.put(Command.CASE_SEND_COMMAND,ReturnDataHandler.INSTANCE);
+        handlerMap.put(Command.CASE_CLEAR_COMMAND,ReturnDataHandler.INSTANCE);
+        handlerMap.put(Command.EXECUTE_COMMAND,ReturnDataHandler.INSTANCE);
     }
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) throws Exception {

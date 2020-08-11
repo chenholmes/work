@@ -1,4 +1,4 @@
-package com.ruoyi.project.server.protocol.request;
+package com.ruoyi.project.server.protocol.packet;
 
 import lombok.Data;
 

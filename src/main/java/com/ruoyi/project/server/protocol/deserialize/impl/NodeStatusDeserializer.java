@@ -2,7 +2,7 @@ package com.ruoyi.project.server.protocol.deserialize.impl;
 
 import com.ruoyi.project.server.protocol.Packet;
 import com.ruoyi.project.server.protocol.deserialize.Deserializer;
-import com.ruoyi.project.server.protocol.request.NodeStatusRequestPacket;
+import com.ruoyi.project.server.protocol.packet.NodeStatusPacket;
 
 /**
  * @author chenli.fnst
@@ -13,8 +13,8 @@ public class NodeStatusDeserializer implements Deserializer {
     public static final NodeStatusDeserializer INSTANCE = new NodeStatusDeserializer();
 
     @Override
-    public Packet deserialize(byte[] data) {
-        NodeStatusRequestPacket packet = new NodeStatusRequestPacket();
+    public Packet deserialize(byte command, byte[] data) {
+        NodeStatusPacket packet = new NodeStatusPacket();
         packet.setStatus(data[0]);
         packet.setStatus(data[1]);
         packet.setCurrentCaseNum(data[2] & 0xff | data[3] << 8);

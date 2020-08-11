@@ -11,8 +11,9 @@ public interface Deserializer {
     /**
      * 反序列化
      *
-     * @param data 数据报
+     * @param command 命令
+     * @param data    数据报
      * @return Packet对象, 数据部
      */
-    Packet deserialize(byte[] data);
+    Packet deserialize(byte command, byte[] data);
 }
