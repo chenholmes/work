@@ -24,6 +24,7 @@ public class ReturnDataSerializer implements Serializer {
      */
     public static byte[] intToBytesLittle(int value) {
         byte[] result = new byte[4];
+        result[3] = (byte) ((value >> 24) & 0xFF);
         result[2] = (byte) ((value >> 16) & 0xFF);
         result[1] = (byte) ((value >> 8) & 0xFF);
         result[0] = (byte) (value & 0xFF);

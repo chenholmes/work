@@ -3,7 +3,7 @@ package com.ruoyi.project.server.protocol;
 import com.ruoyi.project.server.protocol.deserialize.impl.*;
 import com.ruoyi.project.server.protocol.deserialize.Deserializer;
 import com.ruoyi.project.server.protocol.serialize.Serializer;
-import com.ruoyi.project.server.protocol.serialize.impl.ReturnDataSerializer;
+import com.ruoyi.project.server.protocol.serialize.impl.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -55,6 +55,10 @@ public class PacketCodeC {
         serializerMap.put(NODE_STATUS_COMMAND, ReturnDataSerializer.INSTANCE);
         serializerMap.put(DEVICE_STATUS_COMMAND,ReturnDataSerializer.INSTANCE);
         serializerMap.put(VSG_STATUS_COMMAND,ReturnDataSerializer.INSTANCE);
+        serializerMap.put(DEVICE_STATUS_CHANGE_COMMAND, DeviceStatusChangeSerializer.INSTANCE);
+        serializerMap.put(CASE_SEND_COMMAND, CaseSendSerializer.INSTANCE);
+        serializerMap.put(CASE_CLEAR_COMMAND, CaseClearSerializer.INSTANCE);
+        serializerMap.put(EXECUTE_COMMAND, ExecuteCommandSerializer.INSTANCE);
     }
 
     public ByteBuf encode(ByteBuf byteBuf,Packet packet) {
@@ -76,8 +80,8 @@ public class PacketCodeC {
         for (int i = 1; i < returnData.length; i++) {
             sum += returnData[i];
         }
-        returnData[17] = (byte) sum;
-        returnData[18] = ETX;
+        returnData[content.length + 12] = (byte) sum;
+        returnData[content.length + 13] = ETX;
         System.out.println(Arrays.toString(returnData));
         byteBuf.writeBytes(returnData);
         return byteBuf;
