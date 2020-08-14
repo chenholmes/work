@@ -22,7 +22,7 @@ public class CaseClearSerializer implements Serializer<CaseClearPacket> {
         byte[] content = new byte[len];
         int destPos = 2;
         byte[] numB = intToBytesLittle(num);
-        System.arraycopy(numB,0,casePath,destPos,numB.length);
+        System.arraycopy(numB,0,content,0,numB.length);
         for(String path: casePath) {
             path = path + '\0';
             System.arraycopy(path.getBytes(), 0, content, destPos, path.getBytes().length);

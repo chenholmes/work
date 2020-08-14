@@ -26,11 +26,9 @@ public class PacketCodeC {
 
     private static byte STX = 0x02;
     private static byte ETX = 0x03;
-    private static final int RETURN_LEN = 13;
     /**
      *  返回的整个帧长度
      */
-    private static final int RETURN_DATA_LEN = 19;
     /**
      * 返回数据需要计算checksum的数组长度
      */
@@ -62,26 +60,28 @@ public class PacketCodeC {
     }
 
     public ByteBuf encode(ByteBuf byteBuf,Packet packet) {
-        byte[] returnData = new byte[RETURN_DATA_LEN];
+        Serializer serializer = serializerMap.get(packet.getCommand());
+        byte[] content = serializer.serialize(packet);
+        byte[] returnData = new byte[content.length + 15];
+        int dataLen = content.length + 9;
         int cnt = count.getAndIncrement();
         int sum = 0;
         returnData[0] = STX;
-        returnData[1] = (byte) RETURN_LEN;
-        returnData[2] = (byte) (RETURN_LEN >> 8);
-        returnData[3] = (byte) (0 - RETURN_LEN);
-        returnData[4] = (byte) ((0 - RETURN_LEN) >> 8);
+        returnData[1] = (byte) dataLen;
+        returnData[2] = (byte) (dataLen >> 8);
+        returnData[3] = (byte) (0 - dataLen);
+        returnData[4] = (byte) ((0 - dataLen) >> 8);
         returnData[5] = (byte) cnt;
         returnData[6] = (byte) (cnt >> 8);
         returnData[11] = packet.getCommand();
         returnData[12] = (byte) (packet.getCommand() >> 8 & 0xff);
-        Serializer serializer = serializerMap.get(packet.getCommand());
-        byte[] content = serializer.serialize(packet);
+
         System.arraycopy(content, 0, returnData, 13, content.length);
         for (int i = 1; i < returnData.length; i++) {
             sum += returnData[i];
         }
-        returnData[content.length + 12] = (byte) sum;
-        returnData[content.length + 13] = ETX;
+        returnData[content.length + 13] = (byte) sum;
+        returnData[content.length + 14] = ETX;
         System.out.println(Arrays.toString(returnData));
         byteBuf.writeBytes(returnData);
         return byteBuf;

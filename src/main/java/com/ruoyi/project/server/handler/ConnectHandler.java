@@ -35,7 +35,7 @@ public class ConnectHandler extends SimpleChannelInboundHandler<ConnectPacket>{
         connectPacket.setIp(ip);
         channelHandlerContext.channel().attr(Attributes.client).set(computerName);
         NettySocketHandler.put(computerName, (NioSocketChannel) channelHandlerContext.channel());
-        System.out.println(JSON.toJSONString(connectPacket));
+        LOGGER.info("computerName: {}, 建立连接, 连接信息: {}", computerName,JSON.toJSONString(connectPacket));
 
         //TODO 操作DB
 

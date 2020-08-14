@@ -25,9 +25,9 @@ public class AtxIdleStateHandler extends IdleStateHandler {
 
     @Override
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) {
-        LOGGER.warn(READER_IDLE_TIME + "秒内未读到数据，关闭连接");
-        ctx.channel().close();
         String client = ctx.channel().attr(Attributes.client).get();
+        LOGGER.warn("computerName: {}, {}秒内未读到数据，关闭连接",client,READER_IDLE_TIME);
+        ctx.channel().close();
         NettySocketHandler.remove(client);
     }
 }
